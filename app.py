@@ -71,6 +71,7 @@ def create_messages(
     return messages
 
 
+# App interface, capture prompt
 st.title("ChatGPT API Interface")
 model = st.selectbox(label="Model", options=["gpt-4-1106-preview", "gpt-3.5-turbo"])
 new_conversation = st.checkbox(label="Start new conversation?", value=False)
@@ -79,13 +80,16 @@ prompt = st.text_area(
     label="Prompt", placeholder="Enter your prompt here...", height=100
 )
 
-messages = create_messages(prompt=prompt)
+# Create messages
+messages = create_messages(prompt)
 
+# Process submission
 submit = st.button(label="Submit")
+
 if submit:
     if not new_conversation:
         if not os.path.exists("messages.pkl"):
-            print("No history to load")
+            st.text("No history to load")
         else:
             messages.append({"role": "user", "content": prompt})
 
