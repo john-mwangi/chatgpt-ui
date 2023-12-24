@@ -57,6 +57,20 @@ def calculate_cost(input_tokens: int, output_tokens: int):
     return token_used, promt_cost
 
 
+def create_messages(
+    prompt: str = None, role: str = "You are an expert Python programmer"
+):
+    if prompt is None:
+        raise ValueError("prompt cannot be None")
+
+    messages = [
+        {"role": "system", "content": role},
+        {"role": "user", "content": prompt},
+    ]
+
+    return messages
+
+
 st.title("ChatGPT API Interface")
 model = st.selectbox(label="Model", options=["gpt-4-1106-preview", "gpt-3.5-turbo"])
 new_conversation = st.checkbox(label="Start new conversation?", value=False)
@@ -65,11 +79,7 @@ prompt = st.text_area(
     label="Prompt", placeholder="Enter your prompt here...", height=100
 )
 
-role = "You are an expert Python programmer"
-messages = [
-    {"role": "system", "content": role},
-    {"role": "user", "content": prompt},
-]
+messages = create_messages(prompt=prompt)
 
 submit = st.button(label="Submit")
 if submit:
