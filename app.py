@@ -95,6 +95,24 @@ def create_messages(
     return messages
 
 
+def calc_conversation_cost(prompt_cost: float, new_conversation: bool) -> float:
+    prev_costs = [0]
+
+    if not new_conversation:
+        try:
+            with open("costs.pkl", mode="rb") as f:
+                prev_costs: list[float] = pickle.load(f)
+        except Exception as e:
+            print(e)
+
+    prev_costs.append(prompt_cost)
+
+    with open("costs.pkl", mode="wb") as f:
+        pickle.dump(prev_costs, file=f)
+
+    return sum(prev_costs)
+
+
 # App interface, capture prompt
 st.title("ChatGPT API Interface")
 model = st.selectbox(label="Model", options=["gpt-4-1106-preview", "gpt-3.5-turbo"])
@@ -113,8 +131,8 @@ if not new_conversation:
         try:
             with open("messages.pkl", mode="rb") as f:
                 conversation_history = pickle.load(f)
-        except Exception:
-            pass
+        except Exception as e:
+            print(e)
 
 # Create messages
 messages = create_messages(prompt, messages=conversation_history)
@@ -129,8 +147,14 @@ if submit:
         output_tokens=result.get("output_tokens"),
     )
 
+    conversation_cost = calc_conversation_cost(
+        prompt_cost=promt_cost, new_conversation=new_conversation
+    )
+
     st.text(f"Tokens used: {token_used}")
     st.text(f"Prompt cost USD: {promt_cost}")
+    st.text(f"Conversation cost USD: {conversation_cost}")
+
     st.markdown(result.get("msg"))
 
     with open("messages.pkl", mode="wb") as f:
