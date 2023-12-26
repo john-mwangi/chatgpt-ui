@@ -10,6 +10,17 @@ load_dotenv()
 API_KEY = os.environ["API_KEY"]
 openai.api_key = API_KEY
 
+model_pricing = {
+    "gpt-4-1106-preview": {
+        "input_cost_usd_per_1K_tokens": 0.01,
+        "output_cost_usd_per_1K_tokens": 0.03,
+    },
+    "gpt-3.5-turbo-1106": {
+        "input_cost_usd_per_1K_tokens": 0.0010,
+        "output_cost_usd_per_1K_tokens": 0.0020,
+    },
+}
+
 
 def prompt_gpt(
     model: str = None,
@@ -56,11 +67,15 @@ def prompt_gpt(
     }
 
 
-def calculate_cost(input_tokens: int, output_tokens: int):
+def calculate_cost(input_tokens: int, output_tokens: int, model: str):
     """Calculates the cost of the prompt."""
 
-    input_cost_usd_per_1K_tokens = 0.01
-    output_cost_usd_per_1K_tokens = 0.03
+    input_cost_usd_per_1K_tokens = model_pricing.get(model).get(
+        "input_cost_usd_per_1K_tokens"
+    )
+    output_cost_usd_per_1K_tokens = model_pricing.get(model).get(
+        "output_cost_usd_per_1K_tokens"
+    )
 
     input_tokens_thousands = input_tokens / 1000
     output_tokens_thousands = output_tokens / 1000
@@ -115,7 +130,9 @@ def calc_conversation_cost(prompt_cost: float, new_conversation: bool) -> float:
 
 # App interface, capture prompt
 st.title("ChatGPT API Interface")
-model = st.selectbox(label="Model", options=["gpt-4-1106-preview", "gpt-3.5-turbo"])
+model = st.selectbox(
+    label="Model", options=["gpt-4-1106-preview", "gpt-3.5-turbo-1106"]
+)
 new_conversation = st.checkbox(label="Start new conversation?", value=False)
 prompt = st.text_area(
     label="Prompt", placeholder="Enter your prompt here...", height=100
@@ -145,6 +162,7 @@ if submit:
     token_used, promt_cost = calculate_cost(
         input_tokens=result.get("input_tokens"),
         output_tokens=result.get("output_tokens"),
+        model=model,
     )
 
     conversation_cost = calc_conversation_cost(
