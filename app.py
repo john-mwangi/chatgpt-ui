@@ -14,8 +14,23 @@ openai.api_key = API_KEY
 def prompt_gpt(
     model: str = None,
     messages: list[str] = None,
-) -> str:
+) -> dict:
     """
+    Submit a prompt to ChatGPT API including a conversation history.
+
+    Args:
+    ---
+    model: The name of the model
+    messages: A list of messages the includes the prompt and the conversation history
+
+    Returns:
+    ---
+    A dictionary that has the following keys:
+    - msg: ChatGPT response
+    - msgs: The updated conversation history
+    - input_tokens: Number of input tokens used
+    - output_tokens: Number of output tokens used
+
     Useful links:
     ---
     models: https://platform.openai.com/docs/models/gpt-3-5
@@ -35,13 +50,15 @@ def prompt_gpt(
 
     return {
         "msg": msg,
-        "messages": messages,
+        "msgs": messages,
         "input_tokens": input_tokens,
         "output_tokens": output_tokens,
     }
 
 
 def calculate_cost(input_tokens: int, output_tokens: int):
+    """Calculates the cost of the prompt."""
+
     input_cost_usd_per_1K_tokens = 0.01
     output_cost_usd_per_1K_tokens = 0.03
 
@@ -117,4 +134,4 @@ if submit:
     st.markdown(result.get("msg"))
 
     with open("messages.pkl", mode="wb") as f:
-        pickle.dump(result["messages"], file=f)
+        pickle.dump(result["msgs"], file=f)
