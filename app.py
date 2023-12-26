@@ -134,7 +134,7 @@ st.sidebar.title("ChatGPT API Interface")
 model = st.sidebar.selectbox(
     label="Select a model", options=["gpt-4-1106-preview", "gpt-3.5-turbo-1106"]
 )
-new_conversation = st.sidebar.checkbox(label="Start new conversation?", value=False)
+new_conversation = st.sidebar.checkbox(label="Start new conversation?", value=True)
 prompt = st.sidebar.text_area(
     label="Prompt", placeholder="Enter your prompt here...", height=250
 )
