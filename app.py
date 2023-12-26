@@ -176,3 +176,5 @@ if submit:
 
     with open("messages.pkl", mode="wb") as f:
         pickle.dump(result["msgs"], file=f)
+
+# TODO:save different conversations in different files
