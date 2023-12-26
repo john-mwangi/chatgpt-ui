@@ -58,15 +58,22 @@ def calculate_cost(input_tokens: int, output_tokens: int):
 
 
 def create_messages(
-    prompt: str = None, role: str = "You are an expert Python programmer"
+    prompt: str = None,
+    role: str = "You are an expert Python programmer",
+    messages: list[dict] = None,
 ):
+    """Adds the user prompt to the conversation history."""
+
     if prompt is None:
         raise ValueError("prompt cannot be None")
 
-    messages = [
-        {"role": "system", "content": role},
-        {"role": "user", "content": prompt},
-    ]
+    if messages is None:
+        messages = [
+            {"role": "system", "content": role},
+            {"role": "user", "content": prompt},
+        ]
+    else:
+        messages.append({"role": "user", "content": prompt})
 
     return messages
 
@@ -75,24 +82,30 @@ def create_messages(
 st.title("ChatGPT API Interface")
 model = st.selectbox(label="Model", options=["gpt-4-1106-preview", "gpt-3.5-turbo"])
 new_conversation = st.checkbox(label="Start new conversation?", value=False)
-messages = st.file_uploader(label="Conversation history file", type="pkl")
 prompt = st.text_area(
     label="Prompt", placeholder="Enter your prompt here...", height=100
 )
 
+# Load conversation history
+conversation_history = None
+
+if not new_conversation:
+    if not os.path.exists("messages.pkl"):
+        st.text("No history to load")
+    else:
+        try:
+            with open("messages.pkl", mode="rb") as f:
+                conversation_history = pickle.load(f)
+        except Exception:
+            pass
+
 # Create messages
-messages = create_messages(prompt)
+messages = create_messages(prompt, messages=conversation_history)
 
 # Process submission
 submit = st.button(label="Submit")
 
 if submit:
-    if not new_conversation:
-        if not os.path.exists("messages.pkl"):
-            st.text("No history to load")
-        else:
-            messages.append({"role": "user", "content": prompt})
-
     result = prompt_gpt(model=model, messages=messages)
     token_used, promt_cost = calculate_cost(
         input_tokens=result.get("input_tokens"),
@@ -104,4 +117,4 @@ if submit:
     st.markdown(result.get("msg"))
 
     with open("messages.pkl", mode="wb") as f:
-        pickle.dump(result.get("msgs"), file=f)
+        pickle.dump(result["messages"], file=f)
