@@ -129,15 +129,15 @@ def calc_conversation_cost(prompt_cost: float, new_conversation: bool) -> float:
 
 
 # App interface, capture prompt
-st.title("ChatGPT API Interface")
-model = st.selectbox(
-    label="Model", options=["gpt-4-1106-preview", "gpt-3.5-turbo-1106"]
+st.sidebar.title("ChatGPT API Interface")
+model = st.sidebar.selectbox(
+    label="Select a model", options=["gpt-4-1106-preview", "gpt-3.5-turbo-1106"]
 )
-new_conversation = st.checkbox(label="Start new conversation?", value=False)
-prompt = st.text_area(
+new_conversation = st.sidebar.checkbox(label="Start new conversation?", value=False)
+prompt = st.sidebar.text_area(
     label="Prompt", placeholder="Enter your prompt here...", height=100
 )
-submit = st.button(label="Submit")
+submit = st.sidebar.button(label="Submit")
 
 # Load conversation history
 conversation_history = None
@@ -157,7 +157,8 @@ messages = create_messages(prompt, messages=conversation_history)
 
 # Process submission
 if submit:
-    result = prompt_gpt(model=model, messages=messages)
+    with st.spinner():
+        result = prompt_gpt(model=model, messages=messages)
     token_used, promt_cost = calculate_cost(
         input_tokens=result.get("input_tokens"),
         output_tokens=result.get("output_tokens"),
