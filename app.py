@@ -136,7 +136,7 @@ model = st.sidebar.selectbox(
 )
 new_conversation = st.sidebar.checkbox(label="Start new conversation?", value=False)
 prompt = st.sidebar.text_area(
-    label="Prompt", placeholder="Enter your prompt here...", height=100
+    label="Prompt", placeholder="Enter your prompt here...", height=250
 )
 submit = st.sidebar.button(label="Submit")
 
