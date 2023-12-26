@@ -7,6 +7,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+CHATGPT_ROLE = "You are an expert Python programmer"
 API_KEY = os.environ["API_KEY"]
 openai.api_key = API_KEY
 
@@ -91,7 +92,7 @@ def calculate_cost(input_tokens: int, output_tokens: int, model: str):
 
 def create_messages(
     prompt: str = None,
-    role: str = "You are an expert Python programmer",
+    role: str = CHATGPT_ROLE,
     messages: list[dict] = None,
 ):
     """Adds the user prompt to the conversation history."""
