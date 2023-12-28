@@ -1,6 +1,7 @@
 from pathlib import Path
 
-CHATGPT_ROLE = "You are an expert Python programmer"
+models = ["gpt-4-1106-preview", "gpt-3.5-turbo-1106"]
+CHATGPT_ROLE = "You are an expert Python programmer."
 model_pricing = {
     "gpt-4-1106-preview": {
         "input_cost_usd_per_1K_tokens": 0.01,
