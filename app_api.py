@@ -9,7 +9,7 @@ from dotenv import load_dotenv
 
 from src.params import CHATGPT_ROLE, models, msgs_path
 from src.prompt_gpt import create_messages, load_conversation, prompt_gpt
-from src.utils import conversation_cost, prompt_cost
+from src.utils import calc_conversation_cost, calc_prompt_cost
 
 load_dotenv()
 
@@ -35,13 +35,13 @@ messages = create_messages(prompt, role=CHATGPT_ROLE, messages=conversation_hist
 if submit:
     with st.spinner():
         result = prompt_gpt(model=model, messages=messages)
-    token_used, promt_cost = prompt_cost(
+    token_used, promt_cost = calc_prompt_cost(
         input_tokens=result.get("input_tokens"),
         output_tokens=result.get("output_tokens"),
         model=model,
     )
 
-    conversation_cost = conversation_cost(
+    conversation_cost = calc_conversation_cost(
         prompt_cost=promt_cost, new_conversation=new_conversation
     )
 

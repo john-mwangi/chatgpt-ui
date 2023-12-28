@@ -5,7 +5,7 @@ import tiktoken
 from .params import costs_path, model_pricing
 
 
-def prompt_cost(input_tokens: int, output_tokens: int, model: str):
+def calc_prompt_cost(input_tokens: int, output_tokens: int, model: str):
     """Calculates the cost of the prompt."""
 
     input_cost_usd_per_1K_tokens = model_pricing.get(model).get(
@@ -27,7 +27,7 @@ def prompt_cost(input_tokens: int, output_tokens: int, model: str):
     return token_used, promt_cost
 
 
-def conversation_cost(prompt_cost: float, new_conversation: bool) -> float:
+def calc_conversation_cost(prompt_cost: float, new_conversation: bool) -> float:
     prev_costs = [0]
 
     if not new_conversation:
