@@ -16,3 +16,12 @@ model_pricing = {
 ROOT_DIR = Path(__file__).parent.parent.resolve()
 costs_path = ROOT_DIR / "files/costs.pkl"
 msgs_path = ROOT_DIR / "files/messages.pkl"
+
+template = (
+    CHATGPT_ROLE
+    + """Answer the question step by step. 
+    {conversation_history}
+    user: {question}
+    assistant:
+    """
+)
