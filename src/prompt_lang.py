@@ -9,7 +9,9 @@ prompt_template = PromptTemplate(
 )
 
 # define memory
-memory = ConversationBufferMemory(memory_key="conversation_history")
+memory = ConversationBufferMemory(
+    memory_key="conversation_history", ai_prefix="assistant", human_prefix="user"
+)
 
 if __name__ == "__main__":
     from dotenv import load_dotenv
