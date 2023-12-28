@@ -1,3 +1,5 @@
+"""Calls OpenAI API via LangChain"""
+
 import streamlit as st
 from dotenv import load_dotenv
 from langchain.chains import LLMChain
