@@ -7,6 +7,7 @@ from langchain.chat_models import ChatOpenAI
 
 from src.params import models
 from src.prompt_lang import memory, prompt_template
+from src.utils import conversation_cost, num_tokens_from_string, prompt_cost
 
 load_dotenv()
 
@@ -31,7 +32,18 @@ if submit:
     result = {}
     result["msg"] = msg
 
-    # TODO: fix these variables
+    input_tokens = num_tokens_from_string(message=prompt, model=model)
+    output_tokens = num_tokens_from_string(message=msg, model=model)
+
+    token_used, promt_cost = prompt_cost(input_tokens, output_tokens, model)
+    conversation_cost = conversation_cost(
+        prompt_cost=promt_cost, new_conversation=new_conversation
+    )
+
+    result["token_used"] = token_used
+    result["promt_cost"] = promt_cost
+    result["conversation_cost"] = conversation_cost
+
     token_used = result.get("token_used")
     promt_cost = result.get("promt_cost")
     conversation_cost = result.get("conversation_cost")
