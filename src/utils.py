@@ -1,9 +1,11 @@
 import pickle
 
+import tiktoken
+
 from .params import costs_path, model_pricing
 
 
-def calculate_cost(input_tokens: int, output_tokens: int, model: str):
+def prompt_cost(input_tokens: int, output_tokens: int, model: str):
     """Calculates the cost of the prompt."""
 
     input_cost_usd_per_1K_tokens = model_pricing.get(model).get(
@@ -25,7 +27,7 @@ def calculate_cost(input_tokens: int, output_tokens: int, model: str):
     return token_used, promt_cost
 
 
-def calc_conversation_cost(prompt_cost: float, new_conversation: bool) -> float:
+def conversation_cost(prompt_cost: float, new_conversation: bool) -> float:
     prev_costs = [0]
 
     if not new_conversation:
@@ -44,3 +46,17 @@ def calc_conversation_cost(prompt_cost: float, new_conversation: bool) -> float:
         pickle.dump(prev_costs, file=f)
 
     return sum(prev_costs)
+
+
+def num_tokens_from_string(message: str, model: str):
+    """Count the number of tokes from a string"""
+
+    encoding = tiktoken.encoding_for_model(model)
+    tokens = encoding.encode(message)
+    return len(tokens)
+
+
+if __name__ == "__main__":
+    from params import models
+
+    print(num_tokens_from_string(message="tiktoken is great!", model=models[0]))
