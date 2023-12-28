@@ -1,3 +1,5 @@
+"""Calls OpenAI API directly"""
+
 import os
 import pickle
 
