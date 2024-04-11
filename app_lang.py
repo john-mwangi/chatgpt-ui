@@ -18,9 +18,6 @@ load_dotenv()
 # App interface, capture prompt
 st.sidebar.title("ChatGPT API Interface")
 model = st.sidebar.selectbox(label="Select a model", options=models)
-new_conversation = st.sidebar.checkbox(
-    label="Start new conversation?", value=True
-)
 prompt = st.sidebar.text_area(
     label="Prompt", placeholder="Enter your prompt here...", height=250
 )
@@ -42,7 +39,7 @@ if submit:
         input_tokens, output_tokens, model
     )
     conversation_cost = calc_conversation_cost(
-        prompt_cost=promt_cost, new_conversation=new_conversation
+        prompt_cost=promt_cost, new_conversation=True
     )
 
     result = {}
