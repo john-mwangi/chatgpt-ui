@@ -7,14 +7,20 @@ from langchain.chat_models import ChatOpenAI
 
 from src.params import models
 from src.prompt_lang import memory, prompt_template
-from src.utils import calc_conversation_cost, calc_prompt_cost, num_tokens_from_string
+from src.utils import (
+    calc_conversation_cost,
+    calc_prompt_cost,
+    num_tokens_from_string,
+)
 
 load_dotenv()
 
 # App interface, capture prompt
 st.sidebar.title("ChatGPT API Interface")
 model = st.sidebar.selectbox(label="Select a model", options=models)
-new_conversation = st.sidebar.checkbox(label="Start new conversation?", value=True)
+new_conversation = st.sidebar.checkbox(
+    label="Start new conversation?", value=True
+)
 prompt = st.sidebar.text_area(
     label="Prompt", placeholder="Enter your prompt here...", height=250
 )
@@ -32,7 +38,9 @@ if submit:
     input_tokens = num_tokens_from_string(message=prompt, model=model)
     output_tokens = num_tokens_from_string(message=msg, model=model)
 
-    token_used, promt_cost = calc_prompt_cost(input_tokens, output_tokens, model)
+    token_used, promt_cost = calc_prompt_cost(
+        input_tokens, output_tokens, model
+    )
     conversation_cost = calc_conversation_cost(
         prompt_cost=promt_cost, new_conversation=new_conversation
     )
@@ -51,4 +59,10 @@ if submit:
     st.text(f"Prompt cost USD: {promt_cost}")
     st.text(f"Conversation cost USD: {conversation_cost}")
 
-    st.markdown(result.get("msg"))
+    msgs_list = memory.chat_memory.dict()["messages"]
+    msgs = [(m["type"].upper(), m["content"]) for m in msgs_list]
+
+    for msg in msgs:
+        author = f"**{msg[0]}:**"
+        st.write(author)
+        st.markdown(msg[1])
