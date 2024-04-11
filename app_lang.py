@@ -15,6 +15,11 @@ from src.utils import (
 
 load_dotenv()
 
+
+def set_background_colour(txt):
+    return f'<p style="background-color:#EFF2F6;color:#30333F;font-size:20px;border-radius:2%;font-style:italic;">{txt}</p>'
+
+
 # App interface, capture prompt
 st.sidebar.title("ChatGPT API Interface")
 model = st.sidebar.selectbox(label="Select a model", options=models)
@@ -60,6 +65,9 @@ if submit:
     msgs = [(m["type"].upper(), m["content"]) for m in msgs_list]
 
     for msg in msgs:
-        author = f"**{msg[0]}:**"
-        st.write(author)
+        author = msg[0]
+        st.write(
+            set_background_colour(author),
+            unsafe_allow_html=True,
+        )
         st.markdown(msg[1])
