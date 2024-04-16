@@ -15,30 +15,41 @@ from src.utils import (
 
 load_dotenv()
 
-
-def set_background_colour(txt):
-    return f'<p style="background-color:#EFF2F6;color:#30333F;font-size:20px;border-radius:2%;font-style:italic;">{txt}</p>'
-
-
-# App interface, capture prompt
+# Side bar
 st.sidebar.title("ChatGPT API Interface")
 model = st.sidebar.selectbox(label="Select a model", options=models)
-prompt = st.sidebar.text_area(
-    label="Prompt", placeholder="Enter your prompt here...", height=250
-)
-submit = st.sidebar.button(label="Submit")
 
-# Process submission
-if submit:
-    with st.spinner():
-        llm_chain = LLMChain(
-            llm=ChatOpenAI(model=model), prompt=prompt_template, memory=memory
-        )
+# Chat history
+msgs_list = memory.chat_memory.dict()["messages"]
+messages = [(m["type"].upper(), m["content"]) for m in msgs_list]
 
-        msg = llm_chain.predict(question=prompt)
+for msg in messages:
+    role = msg[0]
+    content = msg[1]
 
+    with st.chat_message(name=role):
+        st.markdown(content)
+
+# Prompt handling
+prompt = st.chat_input(placeholder="Say something...")
+if prompt:
+
+    with st.chat_message(name="user"):
+        st.markdown(prompt)
+
+    llm_chain = LLMChain(
+        llm=ChatOpenAI(model=model), prompt=prompt_template, memory=memory
+    )
+
+    # Handle response
+    response = llm_chain.predict(question=prompt)
+
+    with st.chat_message(name="assistant"):
+        st.markdown(response)
+
+    # Cost calculation
     input_tokens = num_tokens_from_string(message=prompt, model=model)
-    output_tokens = num_tokens_from_string(message=msg, model=model)
+    output_tokens = num_tokens_from_string(message=response, model=model)
 
     token_used, promt_cost = calc_prompt_cost(
         input_tokens, output_tokens, model
@@ -48,7 +59,7 @@ if submit:
     )
 
     result = {}
-    result["msg"] = msg
+    result["msg"] = response
     result["token_used"] = token_used
     result["promt_cost"] = promt_cost
     result["conversation_cost"] = conversation_cost
@@ -60,17 +71,3 @@ if submit:
     st.text(f"Tokens used: {token_used}")
     st.text(f"Prompt cost USD: {promt_cost}")
     st.text(f"Conversation cost USD: {conversation_cost}")
-
-    msgs_list = memory.chat_memory.dict()["messages"]
-    msgs = [(m["type"].upper(), m["content"]) for m in msgs_list]
-
-    for msg in msgs:
-        role = msg[0]
-        content = msg[1]
-
-        st.write(
-            set_background_colour(role),
-            unsafe_allow_html=True,
-        )
-
-        st.markdown(content)
