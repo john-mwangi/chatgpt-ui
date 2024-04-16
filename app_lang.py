@@ -27,16 +27,16 @@ for msg in messages:
 
 # Prompt handling
 prompt = st.chat_input(placeholder="Say something...")
-if prompt:
 
+if prompt:
     with st.chat_message(name="user"):
         st.markdown(prompt)
 
+    # Handle response
     llm_chain = LLMChain(
         llm=ChatOpenAI(model=model), prompt=prompt_template, memory=memory
     )
 
-    # Handle response
     response = llm_chain.predict(question=prompt)
 
     with st.chat_message(name="assistant"):
