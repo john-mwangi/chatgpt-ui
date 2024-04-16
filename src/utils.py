@@ -1,5 +1,6 @@
 import pickle
 
+import streamlit as st
 import tiktoken
 
 from .params import costs_path, model_pricing
@@ -27,7 +28,9 @@ def calc_prompt_cost(input_tokens: int, output_tokens: int, model: str):
     return token_used, promt_cost
 
 
-def calc_conversation_cost(prompt_cost: float, new_conversation: bool) -> float:
+def calc_conversation_cost(
+    prompt_cost: float, new_conversation: bool
+) -> float:
     prev_costs = [0]
 
     if not new_conversation:
@@ -56,7 +59,32 @@ def num_tokens_from_string(message: str, model: str):
     return len(tokens)
 
 
+def calculate_cost(prompt, model, response):
+
+    if "conversation_cost" not in st.session_state:
+        st.session_state["conversation_cost"] = 0
+
+    input_tokens = num_tokens_from_string(message=prompt, model=model)
+    output_tokens = num_tokens_from_string(message=response, model=model)
+
+    tokens_used, prompt_cost = calc_prompt_cost(
+        input_tokens, output_tokens, model
+    )
+
+    st.session_state["conversation_cost"] += prompt_cost
+
+    costs = {
+        "tokens_used": tokens_used,
+        "prompt_cost": prompt_cost,
+        "conversation_cost": st.session_state["conversation_cost"],
+    }
+
+    return costs
+
+
 if __name__ == "__main__":
     from params import models
 
-    print(num_tokens_from_string(message="tiktoken is great!", model=models[0]))
+    print(
+        num_tokens_from_string(message="tiktoken is great!", model=models[0])
+    )

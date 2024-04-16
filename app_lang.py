@@ -15,7 +15,7 @@ load_dotenv()
 def display_cost(tokens, prompt_cost, conv_cost):
     return f"""
     <p style="font-size:12px;text-align:right;">
-    Tokens: {tokens}<br>
+    Tokens used: {tokens}<br>
     Prompt cost: {prompt_cost}<br>
     Conversation cost: {conv_cost}
     </p>
@@ -54,32 +54,13 @@ if prompt:
     with st.chat_message(name="assistant"):
         st.markdown(response)
 
-    # Cost calculation
-    input_tokens = utils.num_tokens_from_string(message=prompt, model=model)
-    output_tokens = utils.num_tokens_from_string(message=response, model=model)
-
-    token_used, prompt_cost = utils.calc_prompt_cost(
-        input_tokens, output_tokens, model
-    )
-    conversation_cost = utils.calc_conversation_cost(
-        prompt_cost=prompt_cost, new_conversation=True
-    )
-
-    result = {}
-    result["msg"] = response
-    result["token_used"] = token_used
-    result["prompt_cost"] = prompt_cost
-    result["conversation_cost"] = conversation_cost
-
-    token_used = result.get("token_used")
-    prompt_cost = result.get("prompt_cost")
-    conversation_cost = result.get("conversation_cost")
+    costs = utils.calculate_cost(prompt=prompt, model=model, response=response)
 
     st.write(
         display_cost(
-            tokens=token_used,
-            prompt_cost=prompt_cost,
-            conv_cost=conversation_cost,
+            tokens=costs["tokens_used"],
+            prompt_cost=costs["prompt_cost"],
+            conv_cost=costs["conversation_cost"],
         ),
         unsafe_allow_html=True,
     )
