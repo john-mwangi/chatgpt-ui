@@ -7,11 +7,6 @@ from langchain.chat_models import ChatOpenAI
 
 from src.params import models
 from src.prompt_lang import memory, prompt_template
-from src.utils import (
-    calc_conversation_cost,
-    calc_prompt_cost,
-    num_tokens_from_string,
-)
 
 load_dotenv()
 
@@ -46,28 +41,3 @@ if prompt:
 
     with st.chat_message(name="assistant"):
         st.markdown(response)
-
-    # Cost calculation
-    input_tokens = num_tokens_from_string(message=prompt, model=model)
-    output_tokens = num_tokens_from_string(message=response, model=model)
-
-    token_used, promt_cost = calc_prompt_cost(
-        input_tokens, output_tokens, model
-    )
-    conversation_cost = calc_conversation_cost(
-        prompt_cost=promt_cost, new_conversation=True
-    )
-
-    result = {}
-    result["msg"] = response
-    result["token_used"] = token_used
-    result["promt_cost"] = promt_cost
-    result["conversation_cost"] = conversation_cost
-
-    token_used = result.get("token_used")
-    promt_cost = result.get("promt_cost")
-    conversation_cost = result.get("conversation_cost")
-
-    st.text(f"Tokens used: {token_used}")
-    st.text(f"Prompt cost USD: {promt_cost}")
-    st.text(f"Conversation cost USD: {conversation_cost}")
