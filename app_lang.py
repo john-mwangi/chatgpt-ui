@@ -65,9 +65,12 @@ if submit:
     msgs = [(m["type"].upper(), m["content"]) for m in msgs_list]
 
     for msg in msgs:
-        author = msg[0]
+        role = msg[0]
+        content = msg[1]
+
         st.write(
-            set_background_colour(author),
+            set_background_colour(role),
             unsafe_allow_html=True,
         )
-        st.markdown(msg[1])
+
+        st.markdown(content)
