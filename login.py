@@ -64,7 +64,9 @@ if "user_info" not in st.session_state:
 else:
     # Side bar
     st.sidebar.title("ChatGPT API Interface")
+
     model = st.sidebar.selectbox(label="Select a model", options=models)
+
     st.sidebar.button(
         label="Sign Out", on_click=auth_functions.sign_out, type="primary"
     )
