@@ -215,6 +215,8 @@ def delete_account(password: str) -> None:
     except requests.exceptions.HTTPError as error:
         error_message = json.loads(error.args[1])["error"]["message"]
         print(error_message)
+        st.warning(error_message)
 
     except Exception as error:
         print(error)
+        st.warning(error)
