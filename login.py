@@ -14,6 +14,8 @@ else:
 
     model = st.sidebar.selectbox(label="Select a model", options=models)
 
+    st.sidebar.divider()
+
     st.sidebar.button(
         label="Sign Out", on_click=auth_functions.sign_out, type="primary"
     )
@@ -26,7 +28,7 @@ else:
         label="Delete Account",
         on_click=auth_functions.delete_account,
         args=[password],
-        type="primary",
+        type="secondary",
     )
 
     display_chat_history()
