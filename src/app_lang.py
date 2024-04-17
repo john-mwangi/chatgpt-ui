@@ -6,7 +6,6 @@ from langchain.chains import LLMChain
 from langchain.chat_models import ChatOpenAI
 
 from src import utils
-from src.params import models
 from src.prompt_lang import memory, prompt_template
 
 load_dotenv()
@@ -22,7 +21,7 @@ def display_cost(tokens, prompt_cost, conv_cost):
     """
 
 
-def chat_history():
+def display_chat_history():
     # Chat history
     msgs_list = memory.chat_memory.dict()["messages"]
     messages = [(m["type"].upper(), m["content"]) for m in msgs_list]
