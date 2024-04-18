@@ -5,7 +5,8 @@ from dotenv import load_dotenv
 from langchain.chains import LLMChain
 from langchain.chat_models import ChatOpenAI
 
-from src import utils
+from src import auth_functions, utils
+from src.params import models
 from src.prompt_lang import memory, prompt_template
 
 load_dotenv()
@@ -21,7 +22,28 @@ def display_cost(tokens, prompt_cost, conv_cost):
     """
 
 
-def display_chat_history():
+def run_app():
+    # Side bar
+    st.sidebar.title("ChatGPT API Interface")
+    model = st.sidebar.selectbox(label="Select a model", options=models)
+
+    st.sidebar.divider()
+
+    st.sidebar.button(
+        label="Sign Out", on_click=auth_functions.sign_out, type="primary"
+    )
+
+    password = st.sidebar.text_input(
+        label="Confirm your password", type="password"
+    )
+
+    st.sidebar.button(
+        label="Delete Account",
+        on_click=auth_functions.delete_account,
+        args=[password],
+        type="secondary",
+    )
+
     # Chat history
     msgs_list = memory.chat_memory.dict()["messages"]
     messages = [(m["type"].upper(), m["content"]) for m in msgs_list]
@@ -33,8 +55,6 @@ def display_chat_history():
         with st.chat_message(name=role):
             st.markdown(content)
 
-
-def handle_prompt(model: str):
     # Prompt handling
     prompt = st.chat_input(placeholder="Say something...")
 
