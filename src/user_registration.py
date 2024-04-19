@@ -3,13 +3,17 @@ import streamlit as st
 from src import auth_functions
 
 
-def authenticate_user():
+def authenticate_user(allow_new_users: bool = True):
     col1, col2, col3 = st.columns([1, 2, 1])
+
+    user_opts = ("Yes", "No", "I forgot my password")
+    if not allow_new_users:
+        user_opts = ("Yes",)
 
     # Authentication form layout
     do_you_have_an_account = col2.selectbox(
         label="Do you have an account?",
-        options=("Yes", "No", "I forgot my password"),
+        options=user_opts,
     )
     auth_form = col2.form(key="Authentication form", clear_on_submit=False)
     email = auth_form.text_input(label="Email")
