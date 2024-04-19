@@ -29,9 +29,23 @@ def run_app():
 
     st.sidebar.divider()
 
-    st.sidebar.button(
-        label="Sign Out", on_click=auth_functions.sign_out, type="primary"
-    )
+    col1, col2 = st.sidebar.columns(2)
+
+    with col1:
+        st.button(
+            label="Sign Out",
+            on_click=auth_functions.sign_out,
+            type="primary",
+            help="Log out",
+        )
+
+    with col2:
+        st.button(
+            label="Clear",
+            on_click=memory.clear,
+            type="secondary",
+            help="Clear chat conversation",
+        )
 
     with st.expander(label="Delete your account"):
         password = st.text_input(
