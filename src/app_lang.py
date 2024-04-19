@@ -33,16 +33,19 @@ def run_app():
         label="Sign Out", on_click=auth_functions.sign_out, type="primary"
     )
 
-    password = st.sidebar.text_input(
-        label="Confirm your password", type="password"
-    )
+    with st.expander(label="Delete your account"):
+        password = st.text_input(
+            label="Confirm your password", type="password"
+        )
 
-    st.sidebar.button(
-        label="Delete Account",
-        on_click=auth_functions.delete_account,
-        args=[password],
-        type="secondary",
-    )
+        st.button(
+            label="Delete Account",
+            on_click=auth_functions.delete_account,
+            args=[password],
+            type="primary",
+        )
+
+        st.write(st.session_state.user_info)
 
     # Chat history
     msgs_list = memory.chat_memory.dict()["messages"]
