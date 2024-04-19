@@ -22,6 +22,11 @@ def display_cost(tokens, prompt_cost, conv_cost):
     """
 
 
+def clear_conversation():
+    memory.clear()
+    del st.session_state["conversation_cost"]
+
+
 def run_app():
     # Side bar
     st.sidebar.title("ChatGPT API Interface")
@@ -42,7 +47,7 @@ def run_app():
     with col2:
         st.button(
             label="Clear",
-            on_click=memory.clear,
+            on_click=clear_conversation,
             type="secondary",
             help="Clear chat conversation",
         )
