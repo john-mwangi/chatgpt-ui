@@ -24,7 +24,7 @@ def display_cost(tokens, prompt_cost, conv_cost):
 
 def clear_conversation():
     memory.clear()
-    del st.session_state["conversation_cost"]
+    st.session_state.pop("conversation_cost", default=None)
 
 
 def run_app():
