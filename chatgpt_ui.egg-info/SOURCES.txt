@@ -1,7 +1,0 @@
-README.md
-pyproject.toml
-chatgpt_ui/main.py
-chatgpt_ui.egg-info/PKG-INFO
-chatgpt_ui.egg-info/SOURCES.txt
-chatgpt_ui.egg-info/dependency_links.txt
-chatgpt_ui.egg-info/top_level.txt
