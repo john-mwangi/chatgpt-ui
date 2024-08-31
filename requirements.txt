@@ -5,4 +5,5 @@ langchain==0.0.352
 tiktoken==0.5.2
 pydantic-settings==2.1.0
 anthropic==0.34.1
-chatgpt-ui @ git+https://github.com/john-mwangi/chatgpt-ui@main
+langchain-anthropic
+chatgpt-ui @ git+https://github.com/john-mwangi/chatgpt-ui.git@main
