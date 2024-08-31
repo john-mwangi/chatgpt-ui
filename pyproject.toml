@@ -26,10 +26,7 @@ Issues = "https://github.com/john-mwangi/chatgpt-ui/issues"
 
 # ref: https://setuptools.pypa.io/en/latest/userguide/package_discovery.html
 [tool.setuptools.packages.find]
-# where = ["chatgpt_ui"]
-# include = ["*"]
-
-include = ["chatgpt_ui*"]
+include = ["chatgpt_ui"]
 exclude = ["docs*", "tests*", "files", "*.env"]
 
 # ref: https://setuptools.pypa.io/en/latest/userguide/datafiles.html
