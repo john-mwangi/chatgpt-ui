@@ -24,10 +24,12 @@ Repository = "https://github.com/john-mwangi/chatgpt-ui"
 Issues = "https://github.com/john-mwangi/chatgpt-ui/issues"
 # Changelog = ""
 
+# ref: https://setuptools.pypa.io/en/latest/userguide/package_discovery.html
 [tool.setuptools.packages.find]
 where = ["chatgpt_ui"]
 exclude = ["docs*", "tests*", "files", "*.env"]
 
+# ref: https://setuptools.pypa.io/en/latest/userguide/datafiles.html
 [tool.setuptools]
 include-package-data = true
 
