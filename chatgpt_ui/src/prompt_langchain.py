@@ -1,7 +1,7 @@
 from langchain.chains.conversation.memory import ConversationBufferMemory
 from langchain.prompts import PromptTemplate
 
-from chatgpt_ui.configs.params import template
+from chatgpt_ui.configs import template
 
 # define prompt template
 prompt_template = PromptTemplate(

@@ -8,7 +8,8 @@ import streamlit as st
 from dotenv import load_dotenv
 from utils.utils import calc_conversation_cost, calc_prompt_cost
 
-from chatgpt_ui.configs.params import CHATGPT_ROLE, models, msgs_path
+from chatgpt_ui.configs import GPT_ROLE, msgs_path
+from chatgpt_ui.configs.params import Settings
 from chatgpt_ui.src.prompt_gpt import (
     create_messages,
     load_conversation,
@@ -19,6 +20,7 @@ load_dotenv()
 
 OPENAI_API_KEY = os.environ["OPENAI_API_KEY"]
 openai.api_key = OPENAI_API_KEY
+models = Settings.load().models
 
 # App interface, capture prompt
 st.sidebar.title("ChatGPT API Interface")
@@ -36,7 +38,7 @@ conversation_history = load_conversation(msgs_path, new_conversation)
 
 # Create messages
 messages = create_messages(
-    prompt, role=CHATGPT_ROLE, messages=conversation_history
+    prompt, role=GPT_ROLE, messages=conversation_history
 )
 
 # Process submission

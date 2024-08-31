@@ -3,7 +3,8 @@ import pickle
 import streamlit as st
 import tiktoken
 
-from chatgpt_ui.configs.params import Settings, costs_path
+from chatgpt_ui.configs import costs_path
+from chatgpt_ui.configs.params import Settings
 
 
 def calc_prompt_cost(input_tokens: int, output_tokens: int, model: str):
