@@ -34,4 +34,4 @@ exclude = ["docs*", "tests*", "files", "*.env"]
 include-package-data = true
 
 [tool.setuptools.package-data]
-pattern = ["*.yaml"]
+"*" = ["*.yaml"]
