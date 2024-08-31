@@ -6,10 +6,14 @@ import pickle
 import openai
 import streamlit as st
 from dotenv import load_dotenv
-from src.prompt_gpt import create_messages, load_conversation, prompt_gpt
 from utils.utils import calc_conversation_cost, calc_prompt_cost
 
 from chatgpt_ui.configs.params import CHATGPT_ROLE, models, msgs_path
+from chatgpt_ui.src.prompt_gpt import (
+    create_messages,
+    load_conversation,
+    prompt_gpt,
+)
 
 load_dotenv()
 

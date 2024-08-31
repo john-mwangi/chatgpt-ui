@@ -3,7 +3,7 @@ import pickle
 import streamlit as st
 import tiktoken
 
-from .params import costs_path, model_pricing
+from chatgpt_ui.configs.params import costs_path, model_pricing
 
 
 def calc_prompt_cost(input_tokens: int, output_tokens: int, model: str):
@@ -83,7 +83,7 @@ def calculate_cost(prompt, model, response):
 
 
 if __name__ == "__main__":
-    from params import models
+    from chatgpt_ui.configs.params import models
 
     print(
         num_tokens_from_string(message="tiktoken is great!", model=models[0])

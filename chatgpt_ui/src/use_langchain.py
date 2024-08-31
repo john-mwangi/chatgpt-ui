@@ -4,11 +4,10 @@ import streamlit as st
 from dotenv import load_dotenv
 from langchain.chains import LLMChain
 from langchain.chat_models import ChatOpenAI
-from utils import utils
 
 from chatgpt_ui.configs.params import models
 from chatgpt_ui.src.prompt_langchain import memory, prompt_template
-from chatgpt_ui.utils import auth
+from chatgpt_ui.utils import auth, utils
 
 load_dotenv()
 
