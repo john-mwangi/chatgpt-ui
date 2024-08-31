@@ -3,24 +3,23 @@ import pickle
 import streamlit as st
 import tiktoken
 
-from .params import costs_path, model_pricing
+from chatgpt_ui.configs import costs_path
+from chatgpt_ui.configs.params import Settings
 
 
 def calc_prompt_cost(input_tokens: int, output_tokens: int, model: str):
     """Calculates the cost of the prompt."""
 
-    input_cost_usd_per_1K_tokens = model_pricing.get(model).get(
-        "input_cost_usd_per_1K_tokens"
-    )
-    output_cost_usd_per_1K_tokens = model_pricing.get(model).get(
-        "output_cost_usd_per_1K_tokens"
-    )
+    model_pricing = Settings.load().pricing
+
+    input_price = model_pricing.get(model).get("input_price")
+    output_price = model_pricing.get(model).get("output_price")
 
     input_tokens_thousands = input_tokens / 1000
     output_tokens_thousands = output_tokens / 1000
 
-    input_cost = input_tokens_thousands * input_cost_usd_per_1K_tokens
-    output_cost = output_tokens_thousands * output_cost_usd_per_1K_tokens
+    input_cost = input_tokens_thousands * input_price
+    output_cost = output_tokens_thousands * output_price
 
     token_used = input_tokens + output_tokens
     promt_cost = input_cost + output_cost
@@ -54,8 +53,13 @@ def calc_conversation_cost(
 def num_tokens_from_string(message: str, model: str):
     """Count the number of tokes from a string"""
 
-    encoding = tiktoken.encoding_for_model(model)
+    try:
+        encoding = tiktoken.encoding_for_model(model)
+    except KeyError:
+        encoding = tiktoken.get_encoding("cl100k_base")
+
     tokens = encoding.encode(message)
+
     return len(tokens)
 
 
@@ -74,6 +78,7 @@ def calculate_cost(prompt, model, response):
     st.session_state["conversation_cost"] += prompt_cost
 
     costs = {
+        "model": model,
         "tokens_used": tokens_used,
         "prompt_cost": prompt_cost,
         "conversation_cost": st.session_state["conversation_cost"],
@@ -83,7 +88,7 @@ def calculate_cost(prompt, model, response):
 
 
 if __name__ == "__main__":
-    from params import models
+    from chatgpt_ui.configs.params import models
 
     print(
         num_tokens_from_string(message="tiktoken is great!", model=models[0])

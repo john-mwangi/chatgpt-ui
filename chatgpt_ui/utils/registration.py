@@ -1,6 +1,6 @@
 import streamlit as st
 
-from src import auth_functions
+from chatgpt_ui.utils import auth
 
 
 def authenticate_user(allow_new_users: bool = True):
@@ -8,7 +8,7 @@ def authenticate_user(allow_new_users: bool = True):
 
     user_opts = ("Yes", "No", "I forgot my password")
     if not allow_new_users:
-        user_opts = ("Yes","I forgot my password")
+        user_opts = ("Yes", "I forgot my password")
 
     # Authentication form layout
     do_you_have_an_account = col2.selectbox(
@@ -29,14 +29,14 @@ def authenticate_user(allow_new_users: bool = True):
         label="Sign In", use_container_width=True, type="primary"
     ):
         with auth_notification, st.spinner("Signing in"):
-            auth_functions.sign_in(email, password)
+            auth.sign_in(email, password)
 
     # Create Account
     elif do_you_have_an_account == "No" and auth_form.form_submit_button(
         label="Create Account", use_container_width=True, type="primary"
     ):
         with auth_notification, st.spinner("Creating account"):
-            auth_functions.create_account(email, password)
+            auth.create_account(email, password)
 
     # Password Reset
     elif (
@@ -48,7 +48,7 @@ def authenticate_user(allow_new_users: bool = True):
         )
     ):
         with auth_notification, st.spinner("Sending password reset link"):
-            auth_functions.reset_password(email)
+            auth.reset_password(email)
 
     # Authentication success and warning messages
     if "auth_success" in st.session_state:

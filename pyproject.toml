@@ -18,12 +18,20 @@ classifiers = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/john-mwangi/chatgpt-ui"
+Homepage = "https://chatgpt-ui-jm.streamlit.app/"
+# Documentation = ""
+Repository = "https://github.com/john-mwangi/chatgpt-ui"
 Issues = "https://github.com/john-mwangi/chatgpt-ui/issues"
+# Changelog = ""
 
-[tool.setuptools]
-include-package-data = false
-
+# ref: https://setuptools.pypa.io/en/latest/userguide/package_discovery.html
 [tool.setuptools.packages.find]
-include = ["chatgpt_ui"]
-exclude = ["docs*", "tests*", "files", "*.env", "*.ipynb"]
+where = ["chatgpt_ui"]
+exclude = ["docs*", "tests*", "files", "*.env"]
+
+# ref: https://setuptools.pypa.io/en/latest/userguide/datafiles.html
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.package-data]
+pattern = ["*.yaml"]

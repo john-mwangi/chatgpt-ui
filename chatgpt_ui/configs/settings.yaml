@@ -1,0 +1,16 @@
+models:
+  # in order of priority
+  - claude-3-5-sonnet-20240620
+  - gpt-4-1106-preview
+  - gpt-3.5-turbo-1106
+pricing:
+  # USD per 1K tokens
+  claude-3-5-sonnet-20240620:
+    input_price: 0.003
+    output_price: 0.015
+  gpt-4-1106-preview:
+    input_price: 0.01
+    output_price: 0.03
+  gpt-3.5-turbo-1106:
+    input_price: 0.0010
+    output_price: 0.0020
