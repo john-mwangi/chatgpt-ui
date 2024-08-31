@@ -1,7 +1,7 @@
 from langchain.chains.conversation.memory import ConversationBufferMemory
 from langchain.prompts import PromptTemplate
 
-from .params import models, template
+from ..configs.params import models, template
 
 # define prompt template
 prompt_template = PromptTemplate(
@@ -10,7 +10,9 @@ prompt_template = PromptTemplate(
 
 # define memory
 memory = ConversationBufferMemory(
-    memory_key="conversation_history", ai_prefix="assistant", human_prefix="user"
+    memory_key="conversation_history",
+    ai_prefix="assistant",
+    human_prefix="user",
 )
 
 if __name__ == "__main__":

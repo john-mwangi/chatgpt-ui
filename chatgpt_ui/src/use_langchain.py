@@ -4,10 +4,11 @@ import streamlit as st
 from dotenv import load_dotenv
 from langchain.chains import LLMChain
 from langchain.chat_models import ChatOpenAI
+from utils import utils
 
-from src import auth_functions, utils
-from src.params import models
-from src.prompt_lang import memory, prompt_template
+from chatgpt_ui.configs.params import models
+from chatgpt_ui.src.prompt_langchain import memory, prompt_template
+from chatgpt_ui.utils import auth
 
 load_dotenv()
 
@@ -39,7 +40,7 @@ def run_app():
     with col1:
         st.button(
             label="Sign Out",
-            on_click=auth_functions.sign_out,
+            on_click=auth.sign_out,
             type="primary",
             help="Log out",
         )
@@ -59,7 +60,7 @@ def run_app():
 
         st.button(
             label="Delete Account",
-            on_click=auth_functions.delete_account,
+            on_click=auth.delete_account,
             args=[password],
             type="primary",
         )

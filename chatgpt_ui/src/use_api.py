@@ -6,10 +6,10 @@ import pickle
 import openai
 import streamlit as st
 from dotenv import load_dotenv
-
-from src.params import CHATGPT_ROLE, models, msgs_path
 from src.prompt_gpt import create_messages, load_conversation, prompt_gpt
-from src.utils import calc_conversation_cost, calc_prompt_cost
+from utils.utils import calc_conversation_cost, calc_prompt_cost
+
+from chatgpt_ui.configs.params import CHATGPT_ROLE, models, msgs_path
 
 load_dotenv()
 
@@ -19,7 +19,9 @@ openai.api_key = OPENAI_API_KEY
 # App interface, capture prompt
 st.sidebar.title("ChatGPT API Interface")
 model = st.sidebar.selectbox(label="Select a model", options=models)
-new_conversation = st.sidebar.checkbox(label="Start new conversation?", value=True)
+new_conversation = st.sidebar.checkbox(
+    label="Start new conversation?", value=True
+)
 prompt = st.sidebar.text_area(
     label="Prompt", placeholder="Enter your prompt here...", height=250
 )
@@ -29,7 +31,9 @@ submit = st.sidebar.button(label="Submit")
 conversation_history = load_conversation(msgs_path, new_conversation)
 
 # Create messages
-messages = create_messages(prompt, role=CHATGPT_ROLE, messages=conversation_history)
+messages = create_messages(
+    prompt, role=CHATGPT_ROLE, messages=conversation_history
+)
 
 # Process submission
 if submit:
