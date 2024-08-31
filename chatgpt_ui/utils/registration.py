@@ -8,7 +8,7 @@ def authenticate_user(allow_new_users: bool = True):
 
     user_opts = ("Yes", "No", "I forgot my password")
     if not allow_new_users:
-        user_opts = ("Yes","I forgot my password")
+        user_opts = ("Yes", "I forgot my password")
 
     # Authentication form layout
     do_you_have_an_account = col2.selectbox(
