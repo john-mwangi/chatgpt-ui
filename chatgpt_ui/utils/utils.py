@@ -3,24 +3,22 @@ import pickle
 import streamlit as st
 import tiktoken
 
-from chatgpt_ui.configs.params import costs_path, model_pricing
+from chatgpt_ui.configs.params import Settings, costs_path
 
 
 def calc_prompt_cost(input_tokens: int, output_tokens: int, model: str):
     """Calculates the cost of the prompt."""
 
-    input_cost_usd_per_1K_tokens = model_pricing.get(model).get(
-        "input_cost_usd_per_1K_tokens"
-    )
-    output_cost_usd_per_1K_tokens = model_pricing.get(model).get(
-        "output_cost_usd_per_1K_tokens"
-    )
+    model_pricing = Settings.load().pricing
+
+    input_price = model_pricing.get(model).get("input_price")
+    output_price = model_pricing.get(model).get("output_price")
 
     input_tokens_thousands = input_tokens / 1000
     output_tokens_thousands = output_tokens / 1000
 
-    input_cost = input_tokens_thousands * input_cost_usd_per_1K_tokens
-    output_cost = output_tokens_thousands * output_cost_usd_per_1K_tokens
+    input_cost = input_tokens_thousands * input_price
+    output_cost = output_tokens_thousands * output_price
 
     token_used = input_tokens + output_tokens
     promt_cost = input_cost + output_cost

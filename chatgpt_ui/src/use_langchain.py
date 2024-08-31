@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 from langchain.chains import LLMChain
 from langchain.chat_models import ChatOpenAI
 
-from chatgpt_ui.configs.params import models
+from chatgpt_ui.configs.params import Settings
 from chatgpt_ui.src.prompt_langchain import memory, prompt_template
 from chatgpt_ui.utils import auth, utils
 
@@ -29,6 +29,7 @@ def clear_conversation():
 
 def run_app():
     # Side bar
+    models = Settings.load().models
     st.sidebar.title("ChatGPT API Interface")
     model = st.sidebar.selectbox(label="Select a model", options=models)
 

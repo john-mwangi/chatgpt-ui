@@ -1,7 +1,7 @@
 from langchain.chains.conversation.memory import ConversationBufferMemory
 from langchain.prompts import PromptTemplate
 
-from chatgpt_ui.configs.params import models, template
+from chatgpt_ui.configs.params import template
 
 # define prompt template
 prompt_template = PromptTemplate(
@@ -20,7 +20,11 @@ if __name__ == "__main__":
     from langchain.chains import LLMChain
     from langchain.chat_models import ChatOpenAI
 
+    from chatgpt_ui.configs.params import Settings
+
     load_dotenv()
+
+    models = Settings.load().models
 
     llm_chain = LLMChain(
         llm=ChatOpenAI(model=models[0]),

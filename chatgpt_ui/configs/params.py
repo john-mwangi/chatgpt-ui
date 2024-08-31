@@ -4,6 +4,8 @@ import yaml
 from pydantic_settings import BaseSettings
 
 PKG_DIR = Path(__file__).parent.parent.resolve()
+costs_path = PKG_DIR / "files/costs.pkl"
+msgs_path = PKG_DIR / "files/messages.pkl"
 
 CHATGPT_ROLE = "You are an expert Python programmer."
 
