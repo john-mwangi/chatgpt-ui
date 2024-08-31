@@ -4,6 +4,7 @@ import streamlit as st
 from dotenv import load_dotenv
 from langchain.chains import LLMChain
 from langchain.chat_models import ChatOpenAI
+from langchain_anthropic import ChatAnthropic
 
 from chatgpt_ui.configs.params import Settings
 from chatgpt_ui.src.prompt_langchain import memory, prompt_template
@@ -86,9 +87,26 @@ def run_app():
             st.markdown(prompt)
 
         # Handle response
-        llm_chain = LLMChain(
-            llm=ChatOpenAI(model=model), prompt=prompt_template, memory=memory
-        )
+        if model.startswith("gpt"):
+            llm_chain = LLMChain(
+                llm=ChatOpenAI(model=model),
+                prompt=prompt_template,
+                memory=memory,
+            )
+        elif model.startswith("claude"):
+            llm_chain = LLMChain(
+                llm=ChatAnthropic(
+                    model="claude-3-5-sonnet-20240620",
+                    # temperature=0,
+                    # max_tokens=1024,
+                    # timeout=None,
+                    # max_retries=2,
+                ),
+                prompt=prompt_template,
+                memory=memory,
+            )
+        else:
+            raise ValueError("Unknown model")
 
         response = llm_chain.predict(question=prompt)
 
