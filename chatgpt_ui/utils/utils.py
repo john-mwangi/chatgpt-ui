@@ -52,8 +52,13 @@ def calc_conversation_cost(
 def num_tokens_from_string(message: str, model: str):
     """Count the number of tokes from a string"""
 
-    encoding = tiktoken.encoding_for_model(model)
+    try:
+        encoding = tiktoken.encoding_for_model(model)
+    except KeyError:
+        encoding = tiktoken.get_encoding("cl100k_base")
+
     tokens = encoding.encode(message)
+
     return len(tokens)
 
 
