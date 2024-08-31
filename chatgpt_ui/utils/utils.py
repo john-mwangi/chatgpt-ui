@@ -78,6 +78,7 @@ def calculate_cost(prompt, model, response):
     st.session_state["conversation_cost"] += prompt_cost
 
     costs = {
+        "model": model,
         "tokens_used": tokens_used,
         "prompt_cost": prompt_cost,
         "conversation_cost": st.session_state["conversation_cost"],

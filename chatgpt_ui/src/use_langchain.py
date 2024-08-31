@@ -13,12 +13,13 @@ from chatgpt_ui.utils import auth, utils
 load_dotenv()
 
 
-def display_cost(tokens, prompt_cost, conv_cost):
+def display_cost(model, tokens, prompt_cost, conv_cost):
     return f"""
     <p style="font-size:12px;text-align:right;">
+    Model: {model}<br>
     Tokens used: {tokens}<br>
-    Prompt cost: {prompt_cost}<br>
-    Conversation cost: {conv_cost}
+    Prompt cost: {prompt_cost:.5f}<br>
+    Conversation cost: {conv_cost:.5f}
     </p>
     """
 
@@ -119,6 +120,7 @@ def run_app():
 
         st.write(
             display_cost(
+                model=costs["model"],
                 tokens=costs["tokens_used"],
                 prompt_cost=costs["prompt_cost"],
                 conv_cost=costs["conversation_cost"],
