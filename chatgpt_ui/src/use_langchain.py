@@ -5,7 +5,7 @@ from langchain_anthropic import ChatAnthropic
 
 from chatgpt_ui.src.prompt_langchain import memory, prompt_template
 from chatgpt_ui.src.ui import display_cost, ui
-from chatgpt_ui.utils.utils import calculate_cost
+from chatgpt_ui.utils.utils import CalculateCosts
 
 
 def app():
@@ -60,7 +60,10 @@ def app():
         with st.chat_message(name="assistant"):
             st.markdown(response)
 
-        costs = calculate_cost(prompt=prompt, model=model, response=response)
+        calc = CalculateCosts()
+        costs = calc.calculate_cost(
+            prompt=prompt, model=model, response=response
+        )
 
         st.write(
             display_cost(

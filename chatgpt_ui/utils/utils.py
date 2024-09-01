@@ -7,89 +7,98 @@ from chatgpt_ui.configs import costs_path
 from chatgpt_ui.configs.params import Settings
 
 
-def calc_prompt_cost(input_tokens: int, output_tokens: int, model: str):
-    """Calculates the cost of the prompt."""
+class CalculateCosts:
+    """Class for calculating the costs of conversations with LLMs"""
 
-    model_pricing = Settings.load().pricing
+    def calc_prompt_cost(
+        self, input_tokens: int, output_tokens: int, model: str
+    ):
+        """Calculates the cost of the prompt."""
 
-    input_price = model_pricing.get(model).get("input_price")
-    output_price = model_pricing.get(model).get("output_price")
+        model_pricing = Settings.load().pricing
 
-    input_tokens_thousands = input_tokens / 1000
-    output_tokens_thousands = output_tokens / 1000
+        input_price = model_pricing.get(model).get("input_price")
+        output_price = model_pricing.get(model).get("output_price")
 
-    input_cost = input_tokens_thousands * input_price
-    output_cost = output_tokens_thousands * output_price
+        input_tokens_thousands = input_tokens / 1000
+        output_tokens_thousands = output_tokens / 1000
 
-    token_used = input_tokens + output_tokens
-    promt_cost = input_cost + output_cost
+        input_cost = input_tokens_thousands * input_price
+        output_cost = output_tokens_thousands * output_price
 
-    return token_used, promt_cost
+        token_used = input_tokens + output_tokens
+        promt_cost = input_cost + output_cost
 
+        return token_used, promt_cost
 
-def calc_conversation_cost(
-    prompt_cost: float, new_conversation: bool
-) -> float:
-    prev_costs = [0]
+    def calc_conversation_cost(
+        self, prompt_cost: float, new_conversation: bool
+    ) -> float:
+        prev_costs = [0]
 
-    if not new_conversation:
+        if not new_conversation:
+            try:
+                with open(costs_path, mode="rb") as f:
+                    prev_costs: list[float] = pickle.load(f)
+            except Exception as e:
+                print(e)
+
+        prev_costs.append(prompt_cost)
+
+        if not costs_path.exists():
+            costs_path.parent.mkdir()
+
+        with open(costs_path, mode="wb") as f:
+            pickle.dump(prev_costs, file=f)
+
+        return sum(prev_costs)
+
+    def num_tokens_from_string(self, message: str, model: str):
+        """Count the number of tokes from a string"""
+
         try:
-            with open("costs.pkl", mode="rb") as f:
-                prev_costs: list[float] = pickle.load(f)
-        except Exception as e:
-            print(e)
+            encoding = tiktoken.encoding_for_model(model)
+        except KeyError:
+            encoding = tiktoken.get_encoding("cl100k_base")
 
-    prev_costs.append(prompt_cost)
+        tokens = encoding.encode(message)
 
-    if not costs_path.exists():
-        costs_path.parent.mkdir()
+        return len(tokens)
 
-    with open(costs_path, mode="wb") as f:
-        pickle.dump(prev_costs, file=f)
+    def calculate_cost(self, prompt, model, response):
 
-    return sum(prev_costs)
+        if "conversation_cost" not in st.session_state:
+            st.session_state["conversation_cost"] = 0
 
+        input_tokens = self.num_tokens_from_string(message=prompt, model=model)
+        output_tokens = self.num_tokens_from_string(
+            message=response, model=model
+        )
 
-def num_tokens_from_string(message: str, model: str):
-    """Count the number of tokes from a string"""
+        tokens_used, prompt_cost = self.calc_prompt_cost(
+            input_tokens, output_tokens, model
+        )
 
-    try:
-        encoding = tiktoken.encoding_for_model(model)
-    except KeyError:
-        encoding = tiktoken.get_encoding("cl100k_base")
+        st.session_state["conversation_cost"] += prompt_cost
 
-    tokens = encoding.encode(message)
+        costs = {
+            "model": model,
+            "tokens_used": tokens_used,
+            "prompt_cost": prompt_cost,
+            "conversation_cost": st.session_state["conversation_cost"],
+        }
 
-    return len(tokens)
-
-
-def calculate_cost(prompt, model, response):
-
-    if "conversation_cost" not in st.session_state:
-        st.session_state["conversation_cost"] = 0
-
-    input_tokens = num_tokens_from_string(message=prompt, model=model)
-    output_tokens = num_tokens_from_string(message=response, model=model)
-
-    tokens_used, prompt_cost = calc_prompt_cost(
-        input_tokens, output_tokens, model
-    )
-
-    st.session_state["conversation_cost"] += prompt_cost
-
-    costs = {
-        "model": model,
-        "tokens_used": tokens_used,
-        "prompt_cost": prompt_cost,
-        "conversation_cost": st.session_state["conversation_cost"],
-    }
-
-    return costs
+        return costs
 
 
 if __name__ == "__main__":
-    from chatgpt_ui.configs.params import models
+    from chatgpt_ui.configs.params import Settings
+
+    models = Settings.load().models
+    costs = CalculateCosts()
 
     print(
-        num_tokens_from_string(message="tiktoken is great!", model=models[0])
+        costs.num_tokens_from_string(
+            message="tiktoken is great!", model=models[0]
+        )
     )
