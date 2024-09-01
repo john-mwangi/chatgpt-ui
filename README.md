@@ -6,4 +6,4 @@ Playing with OpenAI's ChatGPT API.
 - OpenAI API Key in a .env file: `OPENAI_API_KEY=XXX`
 
 # Screenshot
-![Alt text](Screenshot.png "Demo app homepage")
+![Alt text](screenshot.png "Demo app homepage")
