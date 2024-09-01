@@ -55,7 +55,7 @@ def ui():
             help="Clear chat conversation",
         )
 
-    with st.expander(label="Delete your account"):
+    with st.expander(label="Manage"):
         password = st.text_input(
             label="Confirm your password", type="password"
         )
@@ -74,6 +74,7 @@ def ui():
             value=GPT_ROLE,
             help="This role will give context to the GPT app",
             placeholder="Enter a role for the Chat GPT app",
+            disabled=True,
         )
 
     return model
