@@ -42,18 +42,12 @@ def app():
             )
         elif model.startswith("claude"):
             llm_chain = LLMChain(
-                llm=ChatAnthropic(
-                    model=model,
-                    # temperature=0,
-                    # max_tokens=1024,
-                    # timeout=None,
-                    # max_retries=2,
-                ),
+                llm=ChatAnthropic(model=model),
                 prompt=prompt_template,
                 memory=memory,
             )
         else:
-            raise ValueError("Unknown model")
+            st.error("Unknown model")
 
         response = llm_chain.predict(question=prompt)
 
