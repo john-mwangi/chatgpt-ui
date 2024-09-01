@@ -3,16 +3,16 @@ from langchain.chains import LLMChain
 from langchain.chat_models import ChatOpenAI
 from langchain_anthropic import ChatAnthropic
 
-from chatgpt_ui.src.prompt_langchain import memory, prompt_template
-from chatgpt_ui.src.ui import display_cost, ui
+from chatgpt_ui.src.langchain import memory, prompt_template
+from chatgpt_ui.src.ui import create_ui, display_cost
 from chatgpt_ui.utils.utils import CalculateCosts
 
 
-def app():
+def create_app():
     """The LangChain based app"""
 
     # Main UI
-    model = ui()
+    model = create_ui()
 
     # LangChain functionality
     # Chat history

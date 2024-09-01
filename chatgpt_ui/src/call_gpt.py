@@ -6,21 +6,18 @@ import pickle
 import openai
 import streamlit as st
 from dotenv import load_dotenv
-from utils.utils import calc_conversation_cost, calc_prompt_cost
+from utils.utils import CalculateCosts
 
 from chatgpt_ui.configs import GPT_ROLE, msgs_path
 from chatgpt_ui.configs.params import Settings
-from chatgpt_ui.src.prompt_gpt import (
-    create_messages,
-    load_conversation,
-    prompt_gpt,
-)
+from chatgpt_ui.src.gpt import create_messages, load_conversation, prompt_gpt
 
 load_dotenv()
 
 OPENAI_API_KEY = os.environ["OPENAI_API_KEY"]
 openai.api_key = OPENAI_API_KEY
 models = Settings.load().models
+calc = CalculateCosts()
 
 # App interface, capture prompt
 st.sidebar.title("ChatGPT API Interface")
@@ -45,13 +42,13 @@ messages = create_messages(
 if submit:
     with st.spinner():
         result = prompt_gpt(model=model, messages=messages)
-    token_used, promt_cost = calc_prompt_cost(
+    token_used, promt_cost = calc.calc_prompt_cost(
         input_tokens=result.get("input_tokens"),
         output_tokens=result.get("output_tokens"),
         model=model,
     )
 
-    conversation_cost = calc_conversation_cost(
+    conversation_cost = calc.calc_conversation_cost(
         prompt_cost=promt_cost, new_conversation=new_conversation
     )
 

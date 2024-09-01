@@ -1,14 +1,11 @@
 """Calls OpenAI API via LangChain"""
 
 import streamlit as st
-from dotenv import load_dotenv
 
 from chatgpt_ui.configs import GPT_ROLE
 from chatgpt_ui.configs.params import Settings
-from chatgpt_ui.src.prompt_langchain import memory
+from chatgpt_ui.src.langchain import memory
 from chatgpt_ui.utils import auth
-
-load_dotenv()
 
 
 def display_cost(model, tokens, prompt_cost, conv_cost):
@@ -27,7 +24,7 @@ def clear_conversation():
     st.session_state.pop("conversation_cost", default=None)
 
 
-def ui():
+def create_ui():
     """Defines the UI of the app"""
 
     # Side bar
