@@ -60,7 +60,7 @@ def create_app():
 
         st.write(
             display_cost(
-                dict(
+                **dict(
                     model=costs["model"],
                     tokens=costs["tokens_used"],
                     prompt_cost=costs["prompt_cost"],
