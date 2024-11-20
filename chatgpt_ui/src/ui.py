@@ -2,13 +2,18 @@
 
 import git
 import streamlit as st
+from git.exc import InvalidGitRepositoryError
 
 from chatgpt_ui.configs import GPT_ROLE, PKG_DIR
 from chatgpt_ui.configs.params import Settings
 from chatgpt_ui.src.langchain import memory
 from chatgpt_ui.utils import auth
 
-repo = git.Repo(PKG_DIR.parent)
+try:
+    repo = git.Repo(PKG_DIR.parent)
+except InvalidGitRepositoryError as e:
+    repo = git.Repo("/mount/src/chatgpt-ui")
+
 main = repo.head.reference
 latest_commit = main.commit.hexsha
 
