@@ -91,7 +91,7 @@ class CalculateCosts:
         return costs
 
 
-def calc_logprobs(logprobs: dict):
+def calc_logprobs(logprobs: dict | None):
     """Sums the log probabilities of the response
 
     Args:

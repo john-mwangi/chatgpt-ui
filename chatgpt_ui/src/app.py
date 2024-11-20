@@ -37,13 +37,13 @@ def create_app():
         if model.startswith("gpt"):
             llm = ChatOpenAI(model=model, **Settings.load().gpt_params)
         elif model.startswith("claude"):
-            llm = (ChatAnthropic(model=model),)
+            llm = ChatAnthropic(model=model)
         else:
             st.error("Unknown model")
 
         ai_msg = llm.invoke(("human", prompt))
         response = ai_msg.content
-        logprobs = ai_msg.response_metadata["logprobs"]
+        logprobs = ai_msg.response_metadata.get("logprobs")
         memory.save_context(
             outputs={"output": response}, inputs={"input": prompt}
         )

@@ -19,13 +19,19 @@ latest_commit = main.commit.hexsha
 
 
 def display_cost(**kwargs):
+    logprobs_text = (
+        f"Log Probabilities: {kwargs['logprobs']:.5f}"
+        if kwargs.get("logprobs") is not None
+        else ""
+    )
+
     return f"""
     <p style="font-size:12px;text-align:right;">
     Model: {kwargs["model"]}<br>
     Tokens used: {kwargs["tokens"]}<br>
     Prompt cost: {kwargs["prompt_cost"]:.5f}<br>
     Conversation cost: {kwargs["conv_cost"]:.5f}<br>
-    Log Probablities: {kwargs["logprobs"]:.5f}
+    {logprobs_text}
     </p>
     """
 
