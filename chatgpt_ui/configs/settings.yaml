@@ -17,5 +17,5 @@ pricing:
 gpt_params:
   # https://platform.openai.com/docs/api-reference/chat/create#completions/create-echo
   logprobs: true
-  max_completion_tokens: null
+  max_tokens: null
   seed: 123
