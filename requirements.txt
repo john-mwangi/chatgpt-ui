@@ -10,4 +10,5 @@ tiktoken==0.8.0
 pydantic-settings==2.6.1
 anthropic==0.39.0
 langchain-anthropic==0.3.0
+stop-words==2018.7.23
 chatgpt-ui @ git+https://github.com/john-mwangi/chatgpt-ui.git@main
