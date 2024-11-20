@@ -10,7 +10,7 @@ template = (
     GPT_ROLE
     + """Answer the question step by step. 
     {conversation_history}
-    user: {question}
+    human: {question}
     assistant:
     """
 )

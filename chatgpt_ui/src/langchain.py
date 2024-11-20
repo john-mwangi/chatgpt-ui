@@ -12,7 +12,7 @@ prompt_template = PromptTemplate(
 memory = ConversationBufferMemory(
     memory_key="conversation_history",
     ai_prefix="assistant",
-    human_prefix="user",
+    human_prefix="human",
 )
 
 if __name__ == "__main__":
