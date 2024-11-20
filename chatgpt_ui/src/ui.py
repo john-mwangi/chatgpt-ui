@@ -8,13 +8,14 @@ from chatgpt_ui.src.langchain import memory
 from chatgpt_ui.utils import auth
 
 
-def display_cost(model, tokens, prompt_cost, conv_cost):
+def display_cost(**kwargs):
     return f"""
     <p style="font-size:12px;text-align:right;">
-    Model: {model}<br>
-    Tokens used: {tokens}<br>
-    Prompt cost: {prompt_cost:.5f}<br>
-    Conversation cost: {conv_cost:.5f}
+    Model: {kwargs["model"]}<br>
+    Tokens used: {kwargs["tokens"]}<br>
+    Prompt cost: {kwargs["prompt_cost"]:.5f}<br>
+    Conversation cost: {kwargs["conv_cost"]:.5f}<br>
+    Log Probablities: {kwargs["logprobs"]:.5f}
     </p>
     """
 

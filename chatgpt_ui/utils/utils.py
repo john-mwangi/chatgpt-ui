@@ -91,6 +91,27 @@ class CalculateCosts:
         return costs
 
 
+def calc_logprobs(logprobs: dict):
+    """Sums the log probabilities of the response
+
+    Args:
+    ---
+    msg: the response from the Open AI model
+
+    Returns:
+    ---
+    The sum of the log probabilities of the response
+    """
+    try:
+        content = logprobs["content"]
+        res = sum([x["logprob"] for x in content])
+        return res
+
+    except Exception as e:
+        print(e)
+        return None
+
+
 if __name__ == "__main__":
     from chatgpt_ui.configs.params import Settings
 
@@ -102,3 +123,5 @@ if __name__ == "__main__":
             message="tiktoken is great!", model=models[0]
         )
     )
+
+    calc_logprobs(msg=None)

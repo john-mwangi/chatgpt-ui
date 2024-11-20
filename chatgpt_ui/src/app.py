@@ -1,11 +1,11 @@
 import streamlit as st
-from langchain.chains import LLMChain
-from langchain.chat_models import ChatOpenAI
 from langchain_anthropic import ChatAnthropic
+from langchain_openai import ChatOpenAI
 
-from chatgpt_ui.src.langchain import memory, prompt_template
+from chatgpt_ui.configs.params import Settings
+from chatgpt_ui.src.langchain import memory
 from chatgpt_ui.src.ui import create_ui, display_cost
-from chatgpt_ui.utils.utils import CalculateCosts
+from chatgpt_ui.utils.utils import CalculateCosts, calc_logprobs
 
 
 def create_app():
@@ -35,21 +35,20 @@ def create_app():
 
         # Handle response
         if model.startswith("gpt"):
-            llm_chain = LLMChain(
-                llm=ChatOpenAI(model=model),
-                prompt=prompt_template,
-                memory=memory,
-            )
+            llm = ChatOpenAI(model=model, **Settings.load().gpt_params)
         elif model.startswith("claude"):
-            llm_chain = LLMChain(
-                llm=ChatAnthropic(model=model),
-                prompt=prompt_template,
-                memory=memory,
-            )
+            llm = (ChatAnthropic(model=model),)
         else:
             st.error("Unknown model")
 
-        response = llm_chain.predict(question=prompt)
+        ai_msg = llm.invoke(("human", prompt))
+        response = ai_msg.content
+        logprobs = ai_msg.response_metadata["logprobs"]
+        memory.save_context(
+            outputs={"output": response}, inputs={"input": prompt}
+        )
+
+        log_probs = calc_logprobs(logprobs)
 
         with st.chat_message(name="assistant"):
             st.markdown(response)
@@ -61,10 +60,13 @@ def create_app():
 
         st.write(
             display_cost(
-                model=costs["model"],
-                tokens=costs["tokens_used"],
-                prompt_cost=costs["prompt_cost"],
-                conv_cost=costs["conversation_cost"],
+                dict(
+                    model=costs["model"],
+                    tokens=costs["tokens_used"],
+                    prompt_cost=costs["prompt_cost"],
+                    conv_cost=costs["conversation_cost"],
+                    logprobs=log_probs,
+                )
             ),
             unsafe_allow_html=True,
         )
