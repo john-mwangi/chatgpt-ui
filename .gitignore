@@ -4,3 +4,4 @@ __pycache__
 files
 *.egg-info
 dist
+samples

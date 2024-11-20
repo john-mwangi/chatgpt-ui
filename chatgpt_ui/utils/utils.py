@@ -1,7 +1,9 @@
 import pickle
 
+import numpy as np
 import streamlit as st
 import tiktoken
+from stop_words import get_stop_words
 
 from chatgpt_ui.configs import costs_path
 from chatgpt_ui.configs.params import Settings
@@ -91,20 +93,28 @@ class CalculateCosts:
         return costs
 
 
-def calc_logprobs(logprobs: dict | None):
+def calc_logprobs(logprobs: list[dict] | None):
     """Sums the log probabilities of the response
 
     Args:
     ---
-    msg: the response from the Open AI model
+    logprobs: the logprobs from the Open AI model
 
     Returns:
     ---
-    The sum of the log probabilities of the response
+    The mean of log probabilities of non-stop words
     """
+    stop_words = get_stop_words("en")
+
     try:
         content = logprobs["content"]
-        res = sum([x["logprob"] for x in content])
+        res = np.mean(
+            [
+                np.exp(x["logprob"])
+                for x in content
+                if x["token"] not in stop_words
+            ]
+        )
         return res
 
     except Exception as e:
@@ -113,6 +123,8 @@ def calc_logprobs(logprobs: dict | None):
 
 
 if __name__ == "__main__":
+    import json
+
     from chatgpt_ui.configs.params import Settings
 
     models = Settings.load().models
@@ -124,4 +136,9 @@ if __name__ == "__main__":
         )
     )
 
-    calc_logprobs(msg=None)
+    with open("../samples/response.json", "r") as f:
+        response = json.load(f)
+
+    msg = response["choices"][0]["logprobs"]
+    res = calc_logprobs(msg)
+    print(res)
