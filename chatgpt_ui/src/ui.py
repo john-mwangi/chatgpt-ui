@@ -1,11 +1,16 @@
 """Calls OpenAI API via LangChain"""
 
+import git
 import streamlit as st
 
-from chatgpt_ui.configs import GPT_ROLE
+from chatgpt_ui.configs import GPT_ROLE, PKG_DIR
 from chatgpt_ui.configs.params import Settings
 from chatgpt_ui.src.langchain import memory
 from chatgpt_ui.utils import auth
+
+repo = git.Repo(PKG_DIR.parent)
+main = repo.head.reference
+latest_commit = main.commit.hexsha
 
 
 def display_cost(**kwargs):
@@ -52,6 +57,8 @@ def create_ui():
             type="secondary",
             help="Clear chat conversation",
         )
+
+    st.sidebar.text(f"latest commit: {latest_commit[:7]}")
 
     with st.expander(label="Manage"):
         password = st.text_input(
