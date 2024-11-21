@@ -82,11 +82,11 @@ def create_ui():
             type="primary",
         )
 
-        # st.write(st.session_state.user_info)
+        st.write(f"{GPT_ROLE=}")
 
-        gpt_role = st.text_area(
-            label="Chat GPT role",
-            value=GPT_ROLE,
+        user_info = st.text_area(
+            label="User Info",
+            value=st.session_state.user_info,
             help="This role will give context to the GPT app",
             placeholder="Enter a role for the Chat GPT app",
             disabled=True,
