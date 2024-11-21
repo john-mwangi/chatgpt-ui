@@ -6,7 +6,6 @@ from git.exc import InvalidGitRepositoryError
 
 from chatgpt_ui.configs import GPT_ROLE, PKG_DIR
 from chatgpt_ui.configs.params import Settings
-from chatgpt_ui.src.langchain import memory
 from chatgpt_ui.utils import auth
 
 try:
@@ -16,6 +15,11 @@ except InvalidGitRepositoryError as e:
 
 main = repo.head.reference
 latest_commit = main.commit.hexsha
+
+
+def clear_conversation():
+    st.session_state.store.clear()
+    st.session_state.pop("conversation_cost", default=None)
 
 
 def display_cost(**kwargs):
@@ -34,11 +38,6 @@ def display_cost(**kwargs):
     {logprobs_text}
     </p>
     """
-
-
-def clear_conversation():
-    memory.clear()
-    st.session_state.pop("conversation_cost", default=None)
 
 
 def create_ui():

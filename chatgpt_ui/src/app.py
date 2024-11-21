@@ -16,7 +16,10 @@ from chatgpt_ui.utils.utils import CalculateCosts, calc_logprobs
 ctx = get_script_run_ctx()
 session_id = ctx.session_id
 
-store = {}
+if "store" not in st.session_state:
+    st.session_state.store = {}
+
+store = st.session_state.store
 
 
 def get_session_history(session_id: str) -> BaseChatMessageHistory:
