@@ -122,6 +122,17 @@ def calc_logprobs(logprobs: list[dict] | None):
         return None
 
 
+def clear_conversation():
+    if "store" not in st.session_state:
+        pass
+    else:
+        session_ids = st.session_state.store.keys()
+        if session_ids:
+            for id in session_ids:
+                st.session_state.store[id].clear()
+    st.session_state.pop("conversation_cost", default=None)
+
+
 if __name__ == "__main__":
     import json
 

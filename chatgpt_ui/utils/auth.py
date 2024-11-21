@@ -7,6 +7,8 @@ import requests
 import streamlit as st
 from dotenv import load_dotenv
 
+from chatgpt_ui.utils.utils import clear_conversation
+
 load_dotenv()
 
 ## -------------------------------------------------------------------------------------------------
@@ -194,6 +196,7 @@ def reset_password(email: str) -> None:
 
 
 def sign_out() -> None:
+    clear_conversation()
     st.session_state.clear()
     st.session_state.auth_success = "You have successfully signed out"
 
