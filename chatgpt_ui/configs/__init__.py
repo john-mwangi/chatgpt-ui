@@ -9,7 +9,6 @@ GPT_ROLE = "You are a helpful assistant."
 template = (
     GPT_ROLE
     + """Answer the question step by step. 
-    {conversation_history}
     human: {question}
     assistant:
     """
