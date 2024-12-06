@@ -1,19 +1,23 @@
 models:
   # in order of priority
   - claude-3-5-sonnet-20240620
-  - gpt-4-1106-preview
-  - gpt-3.5-turbo-1106
+  - o1-preview
+  - gpt-4o-2024-11-20
+  - gpt-3.5-turbo-0125
 pricing:
-  # USD per 1K tokens
+  # USD per 1M tokens
   claude-3-5-sonnet-20240620:
-    input_price: 0.003
-    output_price: 0.015
-  gpt-4-1106-preview:
-    input_price: 0.01
-    output_price: 0.03
-  gpt-3.5-turbo-1106:
-    input_price: 0.0010
-    output_price: 0.0020
+    input_price: 3
+    output_price: 15
+  o1-preview:
+    input_price: 15
+    output_price: 60
+  gpt-4o-2024-11-20:
+    input_price: 2.5
+    output_price: 10
+  gpt-3.5-turbo-0125:
+    input_price: 0.5
+    output_price: 1.5
 gpt_params:
   # https://platform.openai.com/docs/api-reference/chat/create#completions/create-echo
   logprobs: true

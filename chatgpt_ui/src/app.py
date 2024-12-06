@@ -58,6 +58,8 @@ def create_app():
         # Handle response
         if model.startswith("gpt"):
             llm = ChatOpenAI(model=model, **Settings.load().gpt_params)
+        elif model.startswith("o1"):
+            llm = ChatOpenAI(model=model)
         elif model.startswith("claude"):
             llm = ChatAnthropic(model=model)
         else:

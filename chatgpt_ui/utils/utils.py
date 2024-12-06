@@ -22,8 +22,8 @@ class CalculateCosts:
         input_price = model_pricing.get(model).get("input_price")
         output_price = model_pricing.get(model).get("output_price")
 
-        input_tokens_thousands = input_tokens / 1000
-        output_tokens_thousands = output_tokens / 1000
+        input_tokens_thousands = input_tokens / 1_000_000
+        output_tokens_thousands = output_tokens / 1_000_000
 
         input_cost = input_tokens_thousands * input_price
         output_cost = output_tokens_thousands * output_price
