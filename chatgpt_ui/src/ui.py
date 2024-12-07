@@ -14,7 +14,7 @@ from chatgpt_ui.utils.utils import clear_conversation
 try:
     repo = git.Repo(PKG_DIR.parent)
 except InvalidGitRepositoryError as e:
-    repo = git.Repo("/mount/src/chatgpt-ui")
+    repo = git.Repo(os.getcwd())
 
 main = repo.head.reference
 latest_commit = main.commit.hexsha
@@ -67,8 +67,6 @@ def create_ui():
         )
 
     st.sidebar.text(f"latest commit: {latest_commit[:7]}")
-    st.sidebar.text(os.getcwd())
-    st.sidebar.text(PKG_DIR)
 
     with st.expander(label="Manage"):
         password = st.text_input(
