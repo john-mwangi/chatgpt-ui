@@ -1,5 +1,7 @@
 """Calls OpenAI API via LangChain"""
 
+import os
+
 import git
 import streamlit as st
 from git.exc import InvalidGitRepositoryError
@@ -12,6 +14,8 @@ from chatgpt_ui.utils.utils import clear_conversation
 try:
     repo = git.Repo(PKG_DIR.parent)
 except InvalidGitRepositoryError as e:
+    print("present working dir", os.getcwd())
+    print("pkg dir:", PKG_DIR)
     repo = git.Repo("/mount/src/chatgpt-ui")
 
 main = repo.head.reference
