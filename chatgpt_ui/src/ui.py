@@ -6,7 +6,7 @@ import git
 import streamlit as st
 from git.exc import InvalidGitRepositoryError
 
-from chatgpt_ui.configs import GPT_ROLE, PKG_DIR
+from chatgpt_ui.configs import PKG_DIR, template
 from chatgpt_ui.configs.params import Settings
 from chatgpt_ui.utils import auth
 from chatgpt_ui.utils.utils import clear_conversation
@@ -80,7 +80,7 @@ def create_ui():
             type="primary",
         )
 
-        st.write(f"{GPT_ROLE=}")
+        st.write(f"Prompt Template: {template}")
 
         user_info = st.text_area(
             label="User Info",

@@ -8,7 +8,7 @@ GPT_ROLE = "You are a helpful assistant."
 
 template = (
     GPT_ROLE
-    + """Answer the question. 
+    + """ Answer the question. 
     human: {question}
     assistant:
     """
