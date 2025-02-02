@@ -1,0 +1,37 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "chatgpt-ui"
+version = "0.0.2"
+authors = [
+  { name="John Mwangi", email="john.mwangi@live.com" },
+]
+description = "A user inteface to large Language models"
+readme = "README.md"
+requires-python = ">=3.10"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+Homepage = "https://chatgpt-ui-jm.streamlit.app/"
+# Documentation = ""
+Repository = "https://github.com/john-mwangi/chatgpt-ui"
+Issues = "https://github.com/john-mwangi/chatgpt-ui/issues"
+# Changelog = ""
+
+# ref: https://setuptools.pypa.io/en/latest/userguide/package_discovery.html
+[tool.setuptools.packages.find]
+include = ["chatgpt_ui*"]
+exclude = ["docs*", "tests*", "files", "*.env"]
+
+# ref: https://setuptools.pypa.io/en/latest/userguide/datafiles.html
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.package-data]
+"*" = ["*.yaml"]
