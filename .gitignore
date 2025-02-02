@@ -5,3 +5,4 @@ files
 *.egg-info
 dist
 samples
+*.webui_secret_key
