@@ -1,0 +1,16 @@
+services:
+  ollama:
+    image: ollama/ollama:0.5.7
+    command: ["ollama", "run", "llama3.2:latest"]
+    networks:
+      - chatgpt
+  webui:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    networks:
+      - chatgpt
+
+networks:
+  chatgpt:
+    driver: bridge

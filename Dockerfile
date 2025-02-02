@@ -1,14 +1,9 @@
-FROM python:3.10-slim
+FROM python:3.11.11-slim-bullseye
 
-ENV APP_HOME /app
+WORKDIR /openwebui
 
-WORKDIR ${APP_HOME}
+COPY requirements.txt .
 
-COPY . .
-
-# CMD ls -la && pwd
 RUN pip install -r requirements.txt
-CMD bash -c "streamlit run login.py --server.address=0.0.0.0 --server.port=8501"
 
-# DOCKER_BUILDKIT=1 docker build -f Dockerfile -t chatgpt-ui .
-# docker run -p 8501:8501 chatgpt-ui
+CMD ["open-webui serve"]
